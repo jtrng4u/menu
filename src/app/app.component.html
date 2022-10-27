@@ -1,0 +1,19 @@
+<div>
+  <h1>{{title}}</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let menu of pizzaMenu">
+        <td>{{menu.name}}</td>
+        <td>{{getCategory(menu.category)}}</td>
+        <td>{{menu.price}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

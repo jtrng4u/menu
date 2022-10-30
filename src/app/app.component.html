@@ -1,19 +1,122 @@
 <div>
-  <h1>{{title}}</h1>
-  <table>
-    <thead>
+  <app-header></app-header>
+  <div class="container">
+    <table>
+      <thead>
       <tr>
         <th>Item</th>
         <th>Category</th>
         <th>Price</th>
+        <th>Action</th>
       </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let menu of pizzaMenu">
-        <td>{{menu.name}}</td>
-        <td>{{getCategory(menu.category)}}</td>
-        <td>{{menu.price}}</td>
+      </thead>
+      <tbody>
+      <tr *ngFor="let menuItem of menuItems">
+        <td>{{menuItem.name}}</td>
+        <td>{{getCategory(menuItem.category)}}</td>
+        <td *ngIf="menuItem.discounted">{{menuItem.price | currency}}</td>
+        <td *ngIf="!menuItem.discounted">{{menuItem.price | currency}}</td>
+        <td>
+          <button (click)="deleteMenuItem(menuItem.name)">x</button>
+          &nbsp;
+          <button (click)="setUserAction('EditItem', menuItem.name)">edit</button>
+        </td>
       </tr>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+    <br>
+    <button (click)="setUserAction('AddItem')">Add New</button>
+<!--    <app-button color="Orange" text="Add New" (bntClick)="setUserAction('AddItem')"></app-button>-->
+  </div>
+  <br>
+
+  <div class="AddItem" *ngIf="userAction=='AddItem'">
+    <h2>Add Item</h2>
+    <form (ngSubmit)="addItem()">
+      <table>
+        <tr>
+          <td><label for="name">Enter Name</label></td>
+          <input name="name" id="name" [(ngModel)]="menuItem.name"/>
+        </tr>
+        <tr>
+          <td><label for="name">Enter Category</label></td>
+          <td>
+            <select>
+              <option *ngFor="let category of menuCategories">
+                {{category}}
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="name">Enter Price</label></td>
+          <input name="price" id="price" [(ngModel)]="menuItem.price"/>
+        </tr>
+        <tr>
+          <td><label for="discounted">discounted</label></td>
+          <td>
+            <select [(ngModel)]="menuItem.discounted">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+
+            <select *ngIf="menuItem.discounted" [(ngModel)]="menuItem.discountPrice">
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <app-button color="black" text="Add Item"></app-button>
+        </tr>
+      </table>
+    </form>
+  </div>
+
+  <div class="EditItem" *ngIf="userAction=='EditItem'">
+    <h2>Edit Item</h2>
+    <form (ngSubmit)="updateItem()">
+      <table>
+        <tr>
+          <td><label for="name">Enter Name</label></td>
+          <td>{{menuItem.name}}</td>
+        </tr>
+        <tr>
+          <td><label for="name">Enter Category</label></td>
+          <td>
+            <select>
+              <option *ngFor="let category of menuCategories">
+                {{category}}
+              </option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label for="name">Enter Price</label></td>
+          <input name="price" id="price" [(ngModel)]="menuItem.price"/>
+        </tr>
+        <tr>
+          <td><label for="discounted">discounted</label></td>
+          <td>
+            <select [(ngModel)]="menuItem.discounted">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+
+            <select *ngIf="menuItem.discounted" [(ngModel)]="menuItem.discountPrice">
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <app-button color="green" text="Save Item"></app-button>
+        </tr>
+      </table>
+    </form>
+  </div>
 </div>
